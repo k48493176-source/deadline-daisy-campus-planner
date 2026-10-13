@@ -8,6 +8,13 @@
       "when": 1791903170612,
       "tag": "0000_campus_planner",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791903875180,
+      "tag": "0001_auth_owner_policies",
+      "breakpoints": true
     }
   ]
 }

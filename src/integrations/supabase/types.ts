@@ -95,6 +95,7 @@ export type Database = {
       }
       users: {
         Row: {
+          auth_user_id: string | null
           created_at: string
           email: string
           full_name: string
@@ -102,6 +103,7 @@ export type Database = {
           major: string | null
         }
         Insert: {
+          auth_user_id?: string | null
           created_at?: string
           email: string
           full_name: string
@@ -109,6 +111,7 @@ export type Database = {
           major?: string | null
         }
         Update: {
+          auth_user_id?: string | null
           created_at?: string
           email?: string
           full_name?: string
@@ -122,7 +125,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      current_app_user_id: { Args: never; Returns: string }
+      owns_course: { Args: { _course_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
