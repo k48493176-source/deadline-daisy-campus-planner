@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
-import { colorDot, coursesQuery, tasksQuery } from "@/lib/planner";
+import { colorDot, coursesQuery, createCourse, tasksQuery } from "@/lib/planner";
 
 export const Route = createFileRoute("/_authenticated/courses")({
   head: () => ({
@@ -22,6 +23,7 @@ function Courses() {
     <AppShell>
       <h1 className="text-4xl font-semibold">Courses</h1>
       <p className="mt-2 text-muted-foreground">This semester's classes.</p>
+      <AddCourse />
       {isLoading && <p className="mt-6 text-sm text-muted-foreground">Loading…</p>}
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {courses.map((c) => {
@@ -42,5 +44,24 @@ function Courses() {
         })}
       </div>
     </AppShell>
+  );
+}
+
+function AddCourse() {
+  const qc = useQueryClient();
+  const [f, setF] = useState({ code: "", name: "", instructor: "", color: "sage" });
+  const [err, setErr] = useState<string | null>(null);
+  return (
+    <form className="card-surface mt-6 grid gap-2 p-4 sm:grid-cols-5" onSubmit={async (e) => {
+      e.preventDefault(); setErr(null);
+      try { await createCourse(f); setF({ code: "", name: "", instructor: "", color: "sage" }); qc.invalidateQueries({ queryKey: ["courses"] }); }
+      catch (x) { setErr((x as Error).message); }
+    }}>
+      <input className="field" placeholder="Code (e.g. ICT 210)" aria-label="Course code" value={f.code} onChange={(e) => setF({ ...f, code: e.target.value })} required />
+      <input className="field sm:col-span-2" placeholder="Course name" aria-label="Course name" value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} required />
+      <input className="field" placeholder="Instructor" value={f.instructor} onChange={(e) => setF({ ...f, instructor: e.target.value })} />
+      <button className="btn-primary">Add course</button>
+      {err && <p className="text-sm text-destructive sm:col-span-5">{err}</p>}
+    </form>
   );
 }
