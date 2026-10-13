@@ -4,7 +4,7 @@ import { AppShell } from "@/components/AppShell";
 import { TaskRow } from "@/components/TaskRow";
 import { coursesQuery, tasksQuery, userQuery } from "@/lib/planner";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
     meta: [
       { title: "Dashboard · Campus Planner" },

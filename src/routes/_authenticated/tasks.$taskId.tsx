@@ -4,7 +4,7 @@ import { ArrowLeft, Check, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { colorDot, deleteTask, dueLabel, tasksQuery, toggleTask } from "@/lib/planner";
 
-export const Route = createFileRoute("/tasks/$taskId")({
+export const Route = createFileRoute("/_authenticated/tasks/$taskId")({
   head: () => ({
     meta: [
       { title: "Assignment details · Campus Planner" },

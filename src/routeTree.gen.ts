@@ -9,104 +9,110 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as CoursesRouteImport } from './routes/courses'
-import { Route as TasksIndexRouteImport } from './routes/tasks.index'
-import { Route as TasksTaskIdRouteImport } from './routes/tasks.$taskId'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedCoursesRouteImport } from './routes/_authenticated/courses'
+import { Route as AuthenticatedTasksIndexRouteImport } from './routes/_authenticated/tasks.index'
+import { Route as AuthenticatedTasksTaskIdRouteImport } from './routes/_authenticated/tasks.$taskId'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+  id: '/_authenticated/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CoursesRoute = CoursesRouteImport.update({
-  id: '/courses',
+const AuthenticatedCoursesRoute = AuthenticatedCoursesRouteImport.update({
+  id: '/_authenticated/courses',
   path: '/courses',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TasksIndexRoute = TasksIndexRouteImport.update({
-  id: '/tasks/',
+const AuthenticatedTasksIndexRoute = AuthenticatedTasksIndexRouteImport.update({
+  id: '/_authenticated/tasks/',
   path: '/tasks/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TasksTaskIdRoute = TasksTaskIdRouteImport.update({
-  id: '/tasks/$taskId',
-  path: '/tasks/$taskId',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedTasksTaskIdRoute =
+  AuthenticatedTasksTaskIdRouteImport.update({
+    id: '/_authenticated/tasks/$taskId',
+    path: '/tasks/$taskId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/courses': typeof CoursesRoute
-  '/tasks/$taskId': typeof TasksTaskIdRoute
-  '/tasks/': typeof TasksIndexRoute
+  '/courses': typeof AuthenticatedCoursesRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute
+  '/tasks/': typeof AuthenticatedTasksIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/courses': typeof CoursesRoute
-  '/tasks/$taskId': typeof TasksTaskIdRoute
-  '/tasks': typeof TasksIndexRoute
+  '/courses': typeof AuthenticatedCoursesRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute
+  '/tasks': typeof AuthenticatedTasksIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/courses': typeof CoursesRoute
-  '/tasks/$taskId': typeof TasksTaskIdRoute
-  '/tasks/': typeof TasksIndexRoute
+  '/_authenticated/courses': typeof AuthenticatedCoursesRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute
+  '/_authenticated/tasks/': typeof AuthenticatedTasksIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/courses' | '/tasks/$taskId' | '/tasks/'
+  fullPaths: '/courses' | '/' | '/tasks/$taskId' | '/tasks/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/courses' | '/tasks/$taskId' | '/tasks'
-  id: '__root__' | '/' | '/courses' | '/tasks/$taskId' | '/tasks/'
+  to: '/courses' | '/' | '/tasks/$taskId' | '/tasks'
+  id:
+    | '__root__'
+    | '/_authenticated/courses'
+    | '/_authenticated/'
+    | '/_authenticated/tasks/$taskId'
+    | '/_authenticated/tasks/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  CoursesRoute: typeof CoursesRoute
-  TasksTaskIdRoute: typeof TasksTaskIdRoute
-  TasksIndexRoute: typeof TasksIndexRoute
+  AuthenticatedCoursesRoute: typeof AuthenticatedCoursesRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedTasksTaskIdRoute: typeof AuthenticatedTasksTaskIdRoute
+  AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/courses': {
-      id: '/courses'
+    '/_authenticated/courses': {
+      id: '/_authenticated/courses'
       path: '/courses'
       fullPath: '/courses'
-      preLoaderRoute: typeof CoursesRouteImport
+      preLoaderRoute: typeof AuthenticatedCoursesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tasks/': {
-      id: '/tasks/'
+    '/_authenticated/tasks/': {
+      id: '/_authenticated/tasks/'
       path: '/tasks'
       fullPath: '/tasks/'
-      preLoaderRoute: typeof TasksIndexRouteImport
+      preLoaderRoute: typeof AuthenticatedTasksIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tasks/$taskId': {
-      id: '/tasks/$taskId'
+    '/_authenticated/tasks/$taskId': {
+      id: '/_authenticated/tasks/$taskId'
       path: '/tasks/$taskId'
       fullPath: '/tasks/$taskId'
-      preLoaderRoute: typeof TasksTaskIdRouteImport
+      preLoaderRoute: typeof AuthenticatedTasksTaskIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  CoursesRoute: CoursesRoute,
-  TasksTaskIdRoute: TasksTaskIdRoute,
-  TasksIndexRoute: TasksIndexRoute,
+  AuthenticatedCoursesRoute: AuthenticatedCoursesRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedTasksTaskIdRoute: AuthenticatedTasksTaskIdRoute,
+  AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

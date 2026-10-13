@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/AppShell";
 import { colorDot, coursesQuery, tasksQuery } from "@/lib/planner";
 
-export const Route = createFileRoute("/courses")({
+export const Route = createFileRoute("/_authenticated/courses")({
   head: () => ({
     meta: [
       { title: "Courses · Campus Planner" },
