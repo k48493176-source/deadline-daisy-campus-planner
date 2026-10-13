@@ -8,7 +8,7 @@ import { coursesQuery, createTask, tasksQuery } from "@/lib/planner";
 
 type Search = { course?: string | undefined; status?: "open" | "done" | "all" | undefined };
 
-export const Route = createFileRoute("/tasks/")({
+export const Route = createFileRoute("/_authenticated/tasks/")({
   validateSearch: (s: Record<string, unknown>): Search => ({
     course: typeof s["course"] === "string" ? s["course"] : undefined,
     status: s["status"] === "done" || s["status"] === "all" ? s["status"] : s["status"] === "open" ? "open" : undefined,
