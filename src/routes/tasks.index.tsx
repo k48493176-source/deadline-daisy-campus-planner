@@ -6,12 +6,12 @@ import { AppShell } from "@/components/AppShell";
 import { TaskRow } from "@/components/TaskRow";
 import { coursesQuery, createTask, tasksQuery } from "@/lib/planner";
 
-type Search = { course?: string; status?: "open" | "done" | "all" };
+type Search = { course?: string | undefined; status?: "open" | "done" | "all" | undefined };
 
 export const Route = createFileRoute("/tasks/")({
   validateSearch: (s: Record<string, unknown>): Search => ({
-    course: typeof s.course === "string" ? s.course : undefined,
-    status: s.status === "done" || s.status === "all" ? s.status : s.status === "open" ? "open" : undefined,
+    course: typeof s["course"] === "string" ? s["course"] : undefined,
+    status: s["status"] === "done" || s["status"] === "all" ? s["status"] : s["status"] === "open" ? "open" : undefined,
   }),
   head: () => ({
     meta: [
@@ -70,7 +70,7 @@ function Tasks() {
   );
 }
 
-function TaskForm({ courses, defaultCourse, onDone }: { courses: { id: string; code: string; name: string }[]; defaultCourse?: string; onDone: () => void }) {
+function TaskForm({ courses, defaultCourse, onDone }: { courses: { id: string; code: string; name: string }[]; defaultCourse?: string | undefined; onDone: () => void }) {
   const qc = useQueryClient();
   const [form, setForm] = useState({ course_id: defaultCourse ?? "", title: "", description: "", due_date: "", priority: "medium" });
   const m = useMutation({
