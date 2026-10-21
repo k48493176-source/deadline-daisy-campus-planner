@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { Download, GraduationCap, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,6 +13,7 @@ const nav = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   return (
     <div className="min-h-screen">
       <header className="border-b bg-card/70 backdrop-blur">
@@ -30,7 +32,12 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Download className="h-4 w-4" /> Backup
             </button>
             <button className="btn-ghost" aria-label="Sign out"
-              onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/auth" }); }}>
+              onClick={async () => {
+                await queryClient.cancelQueries();
+                queryClient.clear();
+                await supabase.auth.signOut().catch(() => supabase.auth.signOut({ scope: "local" }));
+                navigate({ to: "/auth", replace: true });
+              }}>
               <LogOut className="h-4 w-4" />
             </button>
           </nav>
