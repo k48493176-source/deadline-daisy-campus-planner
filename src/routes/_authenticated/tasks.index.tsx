@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
-import { Plus, X } from "lucide-react";
+import { ListChecks, Plus, X } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { TaskRow } from "@/components/TaskRow";
 import { coursesQuery, createTask, tasksQuery } from "@/lib/planner";
@@ -38,7 +38,7 @@ function Tasks() {
     <AppShell>
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-4xl font-semibold">Assignments</h1>
+          <h1 className="flex items-center gap-2 text-3xl font-semibold sm:text-4xl"><ListChecks className="h-7 w-7 text-primary" aria-hidden="true" />Assignments</h1>
           <p className="mt-2 text-muted-foreground">{list.length} shown</p>
         </div>
         <button className="btn-primary" onClick={() => setShowForm((v) => !v)}>
@@ -49,7 +49,7 @@ function Tasks() {
       {showForm && <TaskForm courses={courses} defaultCourse={course} onDone={() => setShowForm(false)} />}
 
       <div className="mt-6 flex flex-wrap gap-2">
-        <select className="field w-auto" value={course ?? ""} onChange={(e) => navigate({ search: (p) => ({ ...p, course: e.target.value || undefined }) })}>
+        <select aria-label="Filter by course" className="field w-full min-w-0 sm:w-auto" value={course ?? ""} onChange={(e) => navigate({ search: (p) => ({ ...p, course: e.target.value || undefined }) })}>
           <option value="">All courses</option>
           {courses.map((c) => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
         </select>

@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Check, Trash2 } from "lucide-react";
+import { ArrowLeft, CalendarDays, Check, Clock, Flag, Trash2 } from "lucide-react";
+import { PriorityIcon } from "@/components/PriorityBadge";
 import { AppShell } from "@/components/AppShell";
 import { colorDot, deleteTask, dueLabel, tasksQuery, toggleTask } from "@/lib/planner";
 
@@ -38,9 +39,9 @@ function TaskDetail() {
           </div>
           <h1 className={`mt-3 text-3xl font-semibold ${task.completed ? "text-muted-foreground line-through" : ""}`}>{task.title}</h1>
           <dl className="mt-6 grid gap-4 sm:grid-cols-3">
-            <div><dt className="text-xs uppercase text-muted-foreground">Due</dt><dd className="font-semibold">{new Date(task.due_date).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}</dd></div>
-            <div><dt className="text-xs uppercase text-muted-foreground">Status</dt><dd className={`font-semibold ${dueLabel(task.due_date, task.completed).tone}`}>{dueLabel(task.due_date, task.completed).text}</dd></div>
-            <div><dt className="text-xs uppercase text-muted-foreground">Priority</dt><dd className="font-semibold capitalize">{task.priority}</dd></div>
+            <div><dt className="flex items-center gap-1 text-xs uppercase text-muted-foreground"><CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />Due</dt><dd className="font-semibold">{new Date(task.due_date).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}</dd></div>
+            <div><dt className="flex items-center gap-1 text-xs uppercase text-muted-foreground"><Clock className="h-3.5 w-3.5" aria-hidden="true" />Status</dt><dd className={`font-semibold ${dueLabel(task.due_date, task.completed).tone}`}>{dueLabel(task.due_date, task.completed).text}</dd></div>
+            <div><dt className="flex items-center gap-1 text-xs uppercase text-muted-foreground"><Flag className="h-3.5 w-3.5" aria-hidden="true" />Priority</dt><dd className="flex items-center gap-1.5 font-semibold capitalize"><PriorityIcon priority={task.priority} />{task.priority}</dd></div>
           </dl>
           {task.description && <p className="mt-6 whitespace-pre-wrap text-foreground/80">{task.description}</p>}
           <div className="mt-8 flex flex-wrap gap-2">

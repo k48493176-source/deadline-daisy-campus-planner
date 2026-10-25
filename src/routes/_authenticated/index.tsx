@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/AppShell";
 import { TaskRow } from "@/components/TaskRow";
 import { coursesQuery, tasksQuery, userQuery } from "@/lib/planner";
+import { CalendarDays } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
@@ -55,7 +56,7 @@ function Dashboard() {
 
       <section className="mt-8">
         <div className="mb-3 flex items-end justify-between">
-          <h2 className="text-2xl font-semibold">Up next</h2>
+          <h2 className="flex items-center gap-2 text-2xl font-semibold"><CalendarDays className="h-6 w-6 text-primary" aria-hidden="true" />Up next</h2>
           <Link to="/tasks" className="btn-ghost">View all →</Link>
         </div>
         <ul className="card-surface divide-y">

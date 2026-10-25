@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { colorDot, coursesQuery, createCourse, tasksQuery } from "@/lib/planner";
+import { BookOpen } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/courses")({
   head: () => ({
@@ -21,7 +22,7 @@ function Courses() {
   const { data: tasks = [] } = useQuery(tasksQuery);
   return (
     <AppShell>
-      <h1 className="text-4xl font-semibold">Courses</h1>
+      <h1 className="flex items-center gap-2 text-3xl font-semibold sm:text-4xl"><BookOpen className="h-7 w-7 text-primary" aria-hidden="true" />Courses</h1>
       <p className="mt-2 text-muted-foreground">This semester's classes.</p>
       <AddCourse />
       {isLoading && <p className="mt-6 text-sm text-muted-foreground">Loading…</p>}
@@ -59,7 +60,7 @@ function AddCourse() {
     }}>
       <input className="field" placeholder="Code (e.g. ICT 210)" aria-label="Course code" value={f.code} onChange={(e) => setF({ ...f, code: e.target.value })} required />
       <input className="field sm:col-span-2" placeholder="Course name" aria-label="Course name" value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} required />
-      <input className="field" placeholder="Instructor" value={f.instructor} onChange={(e) => setF({ ...f, instructor: e.target.value })} />
+      <input className="field" placeholder="Instructor" aria-label="Instructor" value={f.instructor} onChange={(e) => setF({ ...f, instructor: e.target.value })} />
       <button className="btn-primary">Add course</button>
       {err && <p className="text-sm text-destructive sm:col-span-5">{err}</p>}
     </form>
