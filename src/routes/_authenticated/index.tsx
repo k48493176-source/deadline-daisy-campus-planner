@@ -4,6 +4,7 @@ import { AppShell } from "@/components/AppShell";
 import { TaskRow } from "@/components/TaskRow";
 import { coursesQuery, tasksQuery, userQuery } from "@/lib/planner";
 import { CalendarDays } from "lucide-react";
+import { InsightsPanel } from "@/components/InsightsPanel";
 
 export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
@@ -12,6 +13,8 @@ export const Route = createFileRoute("/_authenticated/")({
       { name: "description", content: "See upcoming deadlines, overdue work and progress across your courses." },
       { property: "og:title", content: "Dashboard · Campus Planner" },
       { property: "og:description", content: "See upcoming deadlines, overdue work and progress across your courses." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Dashboard,
@@ -19,7 +22,7 @@ export const Route = createFileRoute("/_authenticated/")({
 
 function Dashboard() {
   const { data: user } = useQuery(userQuery);
-  const { data: tasks = [], isLoading } = useQuery(tasksQuery);
+  const { data: tasks = [], isLoading, isError } = useQuery(tasksQuery);
   const { data: courses = [] } = useQuery(coursesQuery);
   const open = tasks.filter((t) => !t.completed);
   const overdue = open.filter((t) => new Date(t.due_date) < new Date());
@@ -53,6 +56,8 @@ function Dashboard() {
         <div className="flex justify-between text-sm"><span className="font-semibold">Semester progress</span><span className="text-muted-foreground">{done}/{tasks.length} done · {pct}%</span></div>
         <div className="mt-3 h-2 rounded-full bg-muted"><div className="h-2 rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} /></div>
       </div>
+
+      <InsightsPanel tasks={tasks} loading={isLoading} failed={isError} />
 
       <section className="mt-8">
         <div className="mb-3 flex items-end justify-between">
