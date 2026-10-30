@@ -12,7 +12,8 @@ export function calculateInsights(tasks: InsightTask[], now = new Date()) {
   for (const task of tasks) {
     const due = new Date(task.due_date);
     if (!Number.isFinite(due.getTime())) continue;
-    counts[(due.getDay() + 6) % 7] += 1;
+    const weekday = (due.getDay() + 6) % 7;
+    counts[weekday] = (counts[weekday] ?? 0) + 1;
     if (!task.completed && due.getTime() < now.getTime()) overdue += 1;
   }
   const maxDeadlines = Math.max(...counts);
