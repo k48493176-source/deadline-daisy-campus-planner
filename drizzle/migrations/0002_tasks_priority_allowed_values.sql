@@ -1,0 +1,1 @@
+ALTER TABLE public.tasks ADD CONSTRAINT tasks_priority_allowed_values CHECK (priority IN ('low', 'medium', 'high')); 
