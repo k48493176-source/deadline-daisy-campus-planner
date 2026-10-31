@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { GraduationCap, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { PasswordField } from "@/components/PasswordField";
 import { classifyAuthError, isValidEmail, withTimeout, type AuthErrorKind } from "@/lib/auth-errors";
 
 export const Route = createFileRoute("/auth")({
@@ -28,7 +29,7 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [notice, setNotice] = useState<Notice | null>(null);
-  const [busy, setBusy] = useState<null | "form" | "resend">(null);
+  const [busy, setBusy] = useState<null | "form" | "resend" | "reset">(null);
 
   // Validate an existing identity before redirecting; stale sessions must not loop.
   useEffect(() => {
@@ -105,6 +106,24 @@ function AuthPage() {
     }
   }
 
+  async function sendReset() {
+    const cleanEmail = email.trim().toLowerCase();
+    if (!isValidEmail(cleanEmail)) {
+      setNotice({ tone: "error", text: "Enter your email above first.", kind: "invalid_email" });
+      return;
+    }
+    setBusy("reset"); setNotice(null);
+    try {
+      const { error } = await withTimeout(supabase.auth.resetPasswordForEmail(cleanEmail, { redirectTo: `${window.location.origin}/reset-password` }));
+      if (error) return fail(error);
+      setNotice({ tone: "info", text: "Check your email to reset your password" });
+    } catch (err) {
+      fail(err);
+    } finally {
+      setBusy(null);
+    }
+  }
+
   const showResend = notice?.kind === "unconfirmed";
 
   return (
@@ -119,7 +138,12 @@ function AuthPage() {
             <input className="field w-full" placeholder="Full name" aria-label="Full name" value={name} onChange={(e) => setName(e.target.value)} required />
           )}
           <input className="field w-full" type="email" autoComplete="email" placeholder="Email" aria-label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <input className="field w-full" type="password" autoComplete={mode === "in" ? "current-password" : "new-password"} placeholder="Password" aria-label="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <PasswordField autoComplete={mode === "in" ? "current-password" : "new-password"} placeholder="Password" aria-label="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          {mode === "in" && (
+            <Button type="button" variant="link" className="h-auto p-0 text-sm text-primary underline" disabled={busy !== null} onClick={sendReset}>
+              {busy === "reset" ? "Sending…" : "Forgot password?"}
+            </Button>
+          )}
           <Button type="submit" className="btn-primary w-full" disabled={busy !== null} aria-busy={busy === "form"}>
             {busy === "form" && <Loader2 className="h-4 w-4 animate-spin" />}
             {busy === "form" ? (mode === "in" ? "Signing in…" : "Creating account…") : (mode === "in" ? "Sign in" : "Sign up")}
