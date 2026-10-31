@@ -9,6 +9,7 @@
 - [ ] Check sign-in, assignments, courses, backup and insights without changing existing data.
 
 # Published email sign-in
-- [ ] Remove the Google button and clarify confirmation and credential errors.
-- [ ] Diagnose and test new-user email sign-up and sign-in with confirmation security preserved.
-- [ ] Report verified causes, results, and any remaining published-site limitations.
+- [x] Remove the Google button and clarify confirmation and credential errors.
+- [x] Diagnose and test new-user email sign-up and sign-in with confirmation security preserved.
+- [x] Report verified causes, results, and any remaining published-site limitations.
+- [ ] Publish the updated button and messages (awaiting the user's publish action; live email auth passed).
