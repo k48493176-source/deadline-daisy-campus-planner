@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { GraduationCap, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
+import { Button } from "@/components/ui/button";
 import { classifyAuthError, isValidEmail, withTimeout, type AuthErrorKind } from "@/lib/auth-errors";
 
 export const Route = createFileRoute("/auth")({
@@ -12,6 +12,8 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Sign in to Campus Planner to manage your own courses and deadlines." },
       { property: "og:title", content: "Sign in · Campus Planner" },
       { property: "og:description", content: "Sign in to Campus Planner to manage your own courses and deadlines." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AuthPage,
@@ -26,13 +28,13 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [notice, setNotice] = useState<Notice | null>(null);
-  const [busy, setBusy] = useState<null | "form" | "google" | "resend">(null);
+  const [busy, setBusy] = useState<null | "form" | "resend">(null);
 
-  // Already signed in? Go straight to the dashboard (local check, no network wait).
+  // Validate an existing identity before redirecting; stale sessions must not loop.
   useEffect(() => {
     let active = true;
-    supabase.auth.getSession().then(({ data }) => {
-      if (active && data.session) navigate({ to: "/", replace: true });
+    withTimeout(supabase.auth.getUser()).then(({ data }) => {
+      if (active && data.user) navigate({ to: "/", replace: true });
     }).catch(() => {});
     return () => { active = false; };
   }, [navigate]);
@@ -73,7 +75,7 @@ function AuthPage() {
           setMode("in");
           return;
         }
-        setNotice({ tone: "info", text: `We sent a confirmation link to ${cleanEmail}. Open it, then sign in here. Check your spam folder if it doesn't arrive.`, kind: "unconfirmed" });
+        setNotice({ tone: "info", text: "Check your email to confirm your account", kind: "unconfirmed" });
         setMode("in");
       }
     } catch (err) {
@@ -103,22 +105,7 @@ function AuthPage() {
     }
   }
 
-  async function google() {
-    if (busy) return;
-    setBusy("google"); setNotice(null);
-    try {
-      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-      if (result.error) return fail(result.error);
-      if (result.redirected) return;
-      navigate({ to: "/", replace: true });
-    } catch (err) {
-      fail(err);
-    } finally {
-      setBusy(null);
-    }
-  }
-
-  const showResend = notice?.kind === "unconfirmed" || notice?.kind === "bad_credentials";
+  const showResend = notice?.kind === "unconfirmed";
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
@@ -133,15 +120,11 @@ function AuthPage() {
           )}
           <input className="field w-full" type="email" autoComplete="email" placeholder="Email" aria-label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <input className="field w-full" type="password" autoComplete={mode === "in" ? "current-password" : "new-password"} placeholder="Password" aria-label="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <button type="submit" className="btn-primary w-full" disabled={busy !== null} aria-busy={busy === "form"}>
+          <Button type="submit" className="btn-primary w-full" disabled={busy !== null} aria-busy={busy === "form"}>
             {busy === "form" && <Loader2 className="h-4 w-4 animate-spin" />}
             {busy === "form" ? (mode === "in" ? "Signing in…" : "Creating account…") : (mode === "in" ? "Sign in" : "Sign up")}
-          </button>
+          </Button>
         </form>
-        <button type="button" className="btn-ghost mt-2 w-full" disabled={busy !== null} onClick={google}>
-          {busy === "google" && <Loader2 className="h-4 w-4 animate-spin" />}
-          Continue with Google
-        </button>
         {notice && (
           <div role={notice.tone === "error" ? "alert" : "status"}
             className={`mt-3 rounded-md border px-3 py-2 text-sm ${notice.tone === "error" ? "border-destructive/40 bg-destructive/10 text-destructive" : "border-border bg-accent text-accent-foreground"}`}>
@@ -149,14 +132,14 @@ function AuthPage() {
           </div>
         )}
         {showResend && (
-          <button type="button" className="mt-2 text-sm text-primary underline disabled:opacity-60" disabled={busy !== null} onClick={resend}>
+          <Button type="button" variant="link" className="mt-2 h-auto p-0 text-sm text-primary underline disabled:opacity-60" disabled={busy !== null} onClick={resend}>
             {busy === "resend" ? "Sending…" : "Resend confirmation email"}
-          </button>
+          </Button>
         )}
-        <button type="button" className="mt-4 block text-sm text-primary underline" disabled={busy !== null}
+        <Button type="button" variant="link" className="mt-4 block h-auto p-0 text-sm text-primary underline" disabled={busy !== null}
           onClick={() => { setMode(mode === "in" ? "up" : "in"); setNotice(null); }}>
           {mode === "in" ? "No account? Sign up" : "Have an account? Sign in"}
-        </button>
+        </Button>
       </div>
     </div>
   );

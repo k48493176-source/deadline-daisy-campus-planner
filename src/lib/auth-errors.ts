@@ -16,10 +16,10 @@ export function classifyAuthError(err: unknown): { kind: AuthErrorKind; message:
     return { kind: "network", message: "Can't reach the server. Check your internet connection and try again." };
   }
   if (code === "invalid_credentials" || msg.includes("invalid login credentials")) {
-    return { kind: "bad_credentials", message: "Incorrect email or password. If you just signed up, confirm your email first." };
+    return { kind: "bad_credentials", message: "Wrong email or password" };
   }
   if (code === "email_not_confirmed" || msg.includes("email not confirmed")) {
-    return { kind: "unconfirmed", message: "Your email isn't confirmed yet. Open the link we emailed you, or resend it below." };
+    return { kind: "unconfirmed", message: "Email not confirmed" };
   }
   if (code === "email_address_invalid" || code === "validation_failed" || msg.includes("invalid email") || msg.includes("is invalid")) {
     return { kind: "invalid_email", message: "Please enter a valid email address." };
