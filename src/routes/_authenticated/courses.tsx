@@ -12,6 +12,8 @@ export const Route = createFileRoute("/_authenticated/courses")({
       { name: "description", content: "Your enrolled courses with instructors and assignment progress." },
       { property: "og:title", content: "Courses · Campus Planner" },
       { property: "og:description", content: "Your enrolled courses with instructors and assignment progress." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Courses,

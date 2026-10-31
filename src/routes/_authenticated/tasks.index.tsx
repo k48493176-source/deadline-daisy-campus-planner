@@ -19,6 +19,8 @@ export const Route = createFileRoute("/_authenticated/tasks/")({
       { name: "description", content: "Add, filter, complete and delete your course assignments." },
       { property: "og:title", content: "Assignments · Campus Planner" },
       { property: "og:description", content: "Add, filter, complete and delete your course assignments." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Tasks,

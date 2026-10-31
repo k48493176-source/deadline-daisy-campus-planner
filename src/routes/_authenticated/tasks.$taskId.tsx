@@ -12,6 +12,8 @@ export const Route = createFileRoute("/_authenticated/tasks/$taskId")({
       { name: "description", content: "Details, due date and status for a course assignment." },
       { property: "og:title", content: "Assignment details · Campus Planner" },
       { property: "og:description", content: "Details, due date and status for a course assignment." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: TaskDetail,
