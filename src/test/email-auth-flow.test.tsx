@@ -32,7 +32,7 @@ describe("email authentication security", () => {
     render(<AuthPage />);
     fireEvent.click(screen.getByRole("button", { name: "No account? Sign up" }));
     fillCredentials();
-    fireEvent.click(screen.getByRole("button", { name: "Sign up", exact: true }));
+    fireEvent.click(screen.getByRole("button", { name: /^Sign up$/ }));
     await waitFor(() => expect(mocks.signUp).toHaveBeenCalledTimes(1));
     await screen.findByRole("status");
     expect(mocks.navigate).not.toHaveBeenCalled();
@@ -42,7 +42,7 @@ describe("email authentication security", () => {
     mocks.signInWithPassword.mockResolvedValue({ data: { session: null }, error: { code } });
     render(<AuthPage />);
     fillCredentials();
-    fireEvent.click(screen.getByRole("button", { name: "Sign in", exact: true }));
+    fireEvent.click(screen.getByRole("button", { name: /^Sign in$/ }));
     await screen.findByRole("alert");
     expect(mocks.navigate).not.toHaveBeenCalled();
   });
@@ -50,7 +50,7 @@ describe("email authentication security", () => {
     mocks.signInWithPassword.mockResolvedValue({ data: { session: { user: { id: "test-user" } } }, error: null });
     render(<AuthPage />);
     fillCredentials();
-    fireEvent.click(screen.getByRole("button", { name: "Sign in", exact: true }));
+    fireEvent.click(screen.getByRole("button", { name: /^Sign in$/ }));
     await waitFor(() => expect(mocks.navigate).toHaveBeenCalledWith({ to: "/", replace: true }));
   });
 });
