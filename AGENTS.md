@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Dashboard insights use the existing owner-scoped tasks query and a pure calculation helper; do not introduce separate privileged reads or change access policies for analytics.
+- Email sign-in uses the auth server's error codes and validates existing users before redirecting; never infer identity from stale local sessions or bypass confirmation.
