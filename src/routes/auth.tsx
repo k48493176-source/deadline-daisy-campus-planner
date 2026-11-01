@@ -61,8 +61,10 @@ function AuthPage() {
     const step = e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 1;
     const nextIndex = e.key === "Home" ? 0 : e.key === "End" ? TABS.length - 1 : (index + step + TABS.length) % TABS.length;
     const next = TABS[nextIndex];
+    if (!next) return;
     switchMode(next.mode);
     tabRefs.current[next.mode]?.focus();
+
   }
 
   function fail(err: unknown) {
