@@ -13,3 +13,9 @@
 - [x] Diagnose and test new-user email sign-up and sign-in with confirmation security preserved.
 - [x] Report verified causes, results, and any remaining published-site limitations.
 - [ ] Publish the updated button and messages (awaiting the user's publish action; live email auth passed).
+
+# Easier sign-up from the sign-in page
+- [x] Add "Sign in" and "Create account" tabs to the sign-in form.
+- [x] Show "Wrong email or password. No account yet? Create one." with a button that opens Create account.
+- [x] Keep "Check your email to confirm your account" after sign-up and verify tabs, messages and phone layout.
+- [ ] Publish the tab change so it reaches the live site (awaiting the user's publish action).
