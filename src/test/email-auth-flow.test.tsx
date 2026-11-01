@@ -81,15 +81,10 @@ describe("sign-in / create-account tabs", () => {
     fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
     const alert = await screen.findByRole("alert");
     expect(alert.textContent).toContain("Wrong email or password. No account yet? Create one.");
-    fireEvent.click(within(alert, "Create account"));
+    fireEvent.click(within(alert).getByRole("button", { name: "Create account" }));
     expect(tab("Create account")).toHaveAttribute("aria-selected", "true");
     expect(screen.getByLabelText("Full name")).toBeInTheDocument();
     expect(screen.queryByRole("alert")).toBeNull();
   });
 });
 
-function within(scope: HTMLElement, name: string) {
-  const button = Array.from(scope.querySelectorAll("button")).find((el) => el.textContent === name);
-  if (!button) throw new Error(`No "${name}" button inside the notice`);
-  return button;
-}
