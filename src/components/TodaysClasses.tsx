@@ -7,7 +7,7 @@ import { DAYS, classesQuery, groupByDay, isoWeekday } from "@/lib/timetable";
 export function TodaysClasses() {
   const { data: classes = [], isLoading, isError } = useQuery(classesQuery);
   const today = isoWeekday();
-  const todays = groupByDay(classes)[today - 1].classes;
+  const todays = groupByDay(classes)[today - 1]?.classes ?? [];
   return (
     <section className="mt-6 card-surface" aria-labelledby="todays-classes-h">
       <div className="flex items-center justify-between border-b px-4 py-3">

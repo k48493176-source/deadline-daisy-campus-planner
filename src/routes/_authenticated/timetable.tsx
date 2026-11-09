@@ -26,7 +26,7 @@ function Timetable() {
   const { data: classes = [], isLoading, isError } = useQuery(classesQuery);
   const today = isoWeekday();
   const week = groupByDay(classes);
-  const todays = week[today - 1].classes;
+  const todays = week[today - 1]?.classes ?? [];
   const remove = async (id: string) => {
     if (!confirm("Delete this class?")) return;
     try { await deleteClass(id); qc.invalidateQueries({ queryKey: ["classes"] }); } catch (e) { alert((e as Error).message); }
