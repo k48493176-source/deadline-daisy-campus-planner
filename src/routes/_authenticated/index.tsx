@@ -5,6 +5,7 @@ import { TaskRow } from "@/components/TaskRow";
 import { coursesQuery, tasksQuery, userQuery } from "@/lib/planner";
 import { CalendarDays } from "lucide-react";
 import { InsightsPanel } from "@/components/InsightsPanel";
+import { TodaysClasses } from "@/components/TodaysClasses";
 
 export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
@@ -58,6 +59,8 @@ function Dashboard() {
       </div>
 
       <InsightsPanel tasks={tasks} loading={isLoading} failed={isError} />
+
+      <TodaysClasses />
 
       <section className="mt-8">
         <div className="mb-3 flex items-end justify-between">
