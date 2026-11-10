@@ -1,0 +1,2 @@
+ALTER TABLE public.tasks ADD COLUMN reminder_before text NOT NULL DEFAULT 'none';
+ALTER TABLE public.tasks ADD CONSTRAINT tasks_reminder_before_allowed CHECK (reminder_before IN ('none','1_hour','1_day','2_days'));
