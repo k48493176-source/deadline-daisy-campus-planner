@@ -19,3 +19,7 @@
 - [x] Show "Wrong email or password. No account yet? Create one." with a button that opens Create account.
 - [x] Keep "Check your email to confirm your account" after sign-up and verify tabs, messages and phone layout.
 - [ ] Publish the tab change so it reaches the live site (awaiting the user's publish action).
+
+# Assignment reminders
+- [x] Add the reminder choice, Remind me selects and the Dashboard Reminders card; tested.
+- [ ] Publish (awaiting the user's publish action).
