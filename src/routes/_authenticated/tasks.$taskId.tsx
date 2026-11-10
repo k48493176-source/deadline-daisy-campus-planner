@@ -3,8 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, CalendarDays, Check, Clock, Flag, Trash2 } from "lucide-react";
 import { PriorityIcon } from "@/components/PriorityBadge";
 import { AppShell } from "@/components/AppShell";
-import { colorDot, deleteTask, dueLabel, setReminder, tasksQuery, toggleTask }
-import { REMINDER_OPTIONS } from "@/lib/reminders" from "@/lib/planner";
+import { colorDot, deleteTask, dueLabel, setReminder, tasksQuery, toggleTask } from "@/lib/planner";
+import { REMINDER_OPTIONS } from "@/lib/reminders";
 
 export const Route = createFileRoute("/_authenticated/tasks/$taskId")({
   head: () => ({
