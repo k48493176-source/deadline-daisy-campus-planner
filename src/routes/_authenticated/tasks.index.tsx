@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { ListChecks, Plus, X } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { TaskRow } from "@/components/TaskRow";
+import { REMINDER_OPTIONS } from "@/lib/reminders";
 import { coursesQuery, createTask, tasksQuery } from "@/lib/planner";
 
 type Search = { course?: string | undefined; status?: "open" | "done" | "all" | undefined };
@@ -74,7 +75,7 @@ function Tasks() {
 
 function TaskForm({ courses, defaultCourse, onDone }: { courses: { id: string; code: string; name: string }[]; defaultCourse?: string | undefined; onDone: () => void }) {
   const qc = useQueryClient();
-  const [form, setForm] = useState({ course_id: defaultCourse ?? "", title: "", description: "", due_date: "", priority: "medium" });
+  const [form, setForm] = useState({ course_id: defaultCourse ?? "", title: "", description: "", due_date: "", priority: "medium", reminder_before: "none" });
   const m = useMutation({
     mutationFn: () => createTask(form),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["tasks"] }); onDone(); },
@@ -95,6 +96,11 @@ function TaskForm({ courses, defaultCourse, onDone }: { courses: { id: string; c
       <label className="text-sm font-semibold">Priority
         <select className="field mt-1" value={form.priority} onChange={set("priority")}>
           <option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option>
+        </select>
+      </label>
+      <label className="text-sm font-semibold">Remind me
+        <select className="field mt-1" value={form.reminder_before} onChange={set("reminder_before")}>
+          {REMINDER_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
       </label>
       <label className="text-sm font-semibold sm:col-span-2">Notes<textarea rows={2} className="field mt-1" value={form.description} onChange={set("description")} /></label>

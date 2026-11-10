@@ -99,6 +99,7 @@ export type Database = {
           due_date: string
           id: string
           priority: string
+          reminder_before: string
           title: string
         }
         Insert: {
@@ -109,6 +110,7 @@ export type Database = {
           due_date: string
           id?: string
           priority?: string
+          reminder_before?: string
           title: string
         }
         Update: {
@@ -119,6 +121,7 @@ export type Database = {
           due_date?: string
           id?: string
           priority?: string
+          reminder_before?: string
           title?: string
         }
         Relationships: [

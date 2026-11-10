@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 export type Course = { id: string; code: string; name: string; instructor: string | null; color: string };
 export type Task = {
   id: string; course_id: string; title: string; description: string | null;
-  due_date: string; priority: string; completed: boolean;
+  due_date: string; priority: string; completed: boolean; reminder_before: string;
   courses: Pick<Course, "code" | "name" | "color"> | null;
 };
 
@@ -57,7 +57,11 @@ export async function deleteTask(id: string) {
   const { error } = await supabase.from("tasks").delete().eq("id", id);
   if (error) throw error;
 }
-export async function createTask(t: { course_id: string; title: string; description: string; due_date: string; priority: string }) {
+export async function setReminder(id: string, reminder_before: string) {
+  const { error } = await supabase.from("tasks").update({ reminder_before }).eq("id", id);
+  if (error) throw error;
+}
+export async function createTask(t: { course_id: string; title: string; description: string; due_date: string; priority: string; reminder_before: string }) {
   const { error } = await supabase.from("tasks").insert({ ...t, due_date: new Date(t.due_date).toISOString() });
   if (error) throw error;
 }

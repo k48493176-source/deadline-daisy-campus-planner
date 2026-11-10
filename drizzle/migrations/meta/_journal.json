@@ -29,6 +29,13 @@
       "when": 1794226953971,
       "tag": "0003_create_classes_timetable",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794323960565,
+      "tag": "0004_tasks_reminder_before",
+      "breakpoints": true
     }
   ]
 }

@@ -3,7 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, CalendarDays, Check, Clock, Flag, Trash2 } from "lucide-react";
 import { PriorityIcon } from "@/components/PriorityBadge";
 import { AppShell } from "@/components/AppShell";
-import { colorDot, deleteTask, dueLabel, tasksQuery, toggleTask } from "@/lib/planner";
+import { colorDot, deleteTask, dueLabel, setReminder, tasksQuery, toggleTask } from "@/lib/planner";
+import { REMINDER_OPTIONS } from "@/lib/reminders";
 
 export const Route = createFileRoute("/_authenticated/tasks/$taskId")({
   head: () => ({
@@ -27,6 +28,7 @@ function TaskDetail() {
   const task = tasks?.find((t) => t.id === taskId);
   const refresh = () => qc.invalidateQueries({ queryKey: ["tasks"] });
   const toggle = useMutation({ mutationFn: () => toggleTask(taskId, !task?.completed), onSuccess: refresh });
+  const remind = useMutation({ mutationFn: (v: string) => setReminder(taskId, v), onSuccess: refresh });
   const remove = useMutation({ mutationFn: () => deleteTask(taskId), onSuccess: async () => { await refresh(); navigate({ to: "/tasks" }); } });
 
   return (
@@ -45,6 +47,12 @@ function TaskDetail() {
             <div><dt className="flex items-center gap-1 text-xs uppercase text-muted-foreground"><Clock className="h-3.5 w-3.5" aria-hidden="true" />Status</dt><dd className={`font-semibold ${dueLabel(task.due_date, task.completed).tone}`}>{dueLabel(task.due_date, task.completed).text}</dd></div>
             <div><dt className="flex items-center gap-1 text-xs uppercase text-muted-foreground"><Flag className="h-3.5 w-3.5" aria-hidden="true" />Priority</dt><dd className="flex items-center gap-1.5 font-semibold capitalize"><PriorityIcon priority={task.priority} />{task.priority}</dd></div>
           </dl>
+          <label className="mt-6 block max-w-xs text-sm font-semibold">Remind me
+            <select className="field mt-1" value={task.reminder_before} disabled={remind.isPending} onChange={(e) => remind.mutate(e.target.value)}>
+              {REMINDER_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+            </select>
+          </label>
+          {remind.error && <p className="mt-2 text-sm text-destructive">{(remind.error as Error).message}</p>}
           {task.description && <p className="mt-6 whitespace-pre-wrap text-foreground/80">{task.description}</p>}
           <div className="mt-8 flex flex-wrap gap-2">
             <button className="btn-primary" onClick={() => toggle.mutate()}><Check className="h-4 w-4" />{task.completed ? "Mark incomplete" : "Mark complete"}</button>
