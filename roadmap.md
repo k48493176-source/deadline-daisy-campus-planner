@@ -23,3 +23,7 @@
 # Assignment reminders
 - [x] Add the reminder choice, Remind me selects and the Dashboard Reminders card; tested.
 - [ ] Publish (awaiting the user's publish action).
+
+# Plain HTML, CSS and JavaScript download
+- [x] Prepare separate standalone demo files without changing the running application or connecting to account data.
+- [x] Verify the assignment, course and timetable interactions and deliver the inspected files.
